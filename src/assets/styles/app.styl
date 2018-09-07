@@ -1,0 +1,30 @@
+/* variables */
+bgColor = #fff
+fontColor = #000
+
+box-sizing(n)
+  -webkit-box-sizing n
+  -moz-box-sizing n
+  box-sizing n
+
+html
+  box-sizing border-box
+
+*,
+*:before,
+*:after
+  box-sizing inherit
+
+body
+  min-width 320px
+  margin 0
+  font-size 16px
+  color fontColor
+  background-color bgColor
+
+#app
+  font-family 'Avenir', Helvetica, Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  text-align center
+  width 100%
