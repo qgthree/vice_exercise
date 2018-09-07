@@ -1,14 +1,14 @@
 <template>
-  <div class="selector">
-    <section class="show-grid">
-      <router-link v-for="show in shows" :key="show.id" :to="{ query: { id: show.id } }" class="show-grid--show" :style="{'background-image': 'url(' + show.product_image_url + ')'}" :class="show.column">
+  <section class="shows--selector">
+    <nav class="shows--grid">
+      <router-link v-for="show in shows" :key="show.id" :to="{ query: { id: show.id } }" class="shows--show" :style="{'background-image': 'url(' + show.product_image_url + ')'}" :class="show.column">
       </router-link>
-    </section>
-    <section class="show-details" v-if="currentShow">
+    </nav>
+    <div class="shows--details" v-if="currentShow">
       <span>{{currentShow.episodes}} episodes</span>
       <h1>{{currentShow.title}}</h1>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -22,7 +22,6 @@ import { Component, Prop, Vue } from "vue-property-decorator";
   }
 })
 export default class ShowSelector extends Vue {
-  // get the shows, and the current show
   @Prop() private shows!: object;
 }
 </script>
@@ -34,18 +33,18 @@ export default class ShowSelector extends Vue {
     grid-column-start n
     grid-column-end n+1
 
-  .selector
+  .shows--selector
     width 100%
     overflow hidden
     margin 30px 0px
-    .show-grid
+    .shows--grid
       display grid
       grid-gap 30px
       grid-template-columns repeat(7, 1fr)
       width 350%
       left -125%
       position relative
-      .show-grid--show
+      .shows--show
         width 100%
         height 0
         padding-bottom 150%
@@ -54,6 +53,10 @@ export default class ShowSelector extends Vue {
         transition all 0.2s ease
         grid-row-start 1
         grid-row-end 2
+        opacity 0.7
+        transition all 200ms
+        &:hover
+          opacity 1
 
       .col1
         start 1
@@ -63,6 +66,7 @@ export default class ShowSelector extends Vue {
         start 3
       .col4
         start 4
+        opacity 1
       .col5
         start 5
       .col6
@@ -70,7 +74,7 @@ export default class ShowSelector extends Vue {
       .col7
         start 7
 
-  .show-details
+  .shows--details
     margin 15px
     text-transform uppercase
     h1
@@ -79,4 +83,16 @@ export default class ShowSelector extends Vue {
     span
       opacity 0.7
       font-size: 0.9rem
+
+  @media screen and (min-width: 980px)
+    .shows--selector
+      .shows--grid
+        width 180%
+        left -40%
+      .shows--details
+        margin 20px
+        h1
+          font-size 1.4rem
+        span
+          font-size: 1rem
 </style>

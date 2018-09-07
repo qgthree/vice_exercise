@@ -13,7 +13,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async fetchShows({ commit, state }, id) {
+    async fetchShows({ commit }, id) {
       try {
         const response = await fetch("http://localhost:3000/shows.json");
         if (!response.ok) throw new Error(response.statusText);

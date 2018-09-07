@@ -15,7 +15,6 @@ import Selector from "@/components/Selector.vue"; // @ is an alias to /src
   },
   computed: {
     ...mapState(["shows"])
-    // index of selected show for display component
   },
   methods: {
     ...mapActions(["fetchShows"])
@@ -31,3 +30,8 @@ import Selector from "@/components/Selector.vue"; // @ is an alias to /src
 })
 export default class Home extends Vue {}
 </script>
+
+<style scoped lang="stylus">
+  .shows
+    min-width 320px
+</style>
