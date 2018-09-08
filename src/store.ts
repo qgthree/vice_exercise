@@ -27,7 +27,7 @@ export default new Vuex.Store({
 
         // set each show's place in the 7-show rotation
         for (let i = 0; i < allShows.shows.length; i++) {
-          allShows.shows[i].column = "col" + (i - showIndex + 4);
+          allShows.shows[i].column = i - showIndex + 4;
         }
 
         // create a subset of 7 shows

@@ -1,9 +1,9 @@
 <template>
   <section class="shows--selector">
-    <nav class="shows--grid">
-      <router-link v-for="show in shows" :key="show.id" :to="{ query: { id: show.id } }" class="shows--show" :style="{'background-image': 'url(' + show.product_image_url + ')'}" :class="show.column">
+    <div class="shows--grid">
+      <router-link v-for="{id, product_image_url, column} in shows" :key="id" :to="{ query: { id: id } }" class="shows--show" :style="{'background-image': `url(${product_image_url})`}" :class="`col${column}`">
       </router-link>
-    </nav>
+    </div>
     <div class="shows--details" v-if="currentShow">
       <span>{{currentShow.episodes}} episodes</span>
       <h1>{{currentShow.title}}</h1>
@@ -17,7 +17,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({
   computed: {
     currentShow(): number {
-      return (<any>this).shows.find((show: any) => show.column === "col4");
+      return (<any>this).shows.find((show: any) => show.column === 4);
     }
   }
 })
@@ -33,6 +33,25 @@ export default class ShowSelector extends Vue {
     grid-column-start n
     grid-column-end n+1
 
+  responsiveGrid(x, y)
+    .shows--selector
+      .shows--grid
+        width x
+        left y
+
+  responsiveDetails(x, y, z)
+    .shows--selector
+      .shows--details
+        text-transform uppercase
+        margin x
+        h1
+          font-size y
+          margin 8px
+        span
+          font-size: z
+          opacity 0.7
+
+  // template styles
   .shows--selector
     width 100%
     overflow hidden
@@ -41,8 +60,6 @@ export default class ShowSelector extends Vue {
       display grid
       grid-gap 30px
       grid-template-columns repeat(7, 1fr)
-      width 350%
-      left -125%
       position relative
       .shows--show
         width 100%
@@ -74,25 +91,15 @@ export default class ShowSelector extends Vue {
       .col7
         start 7
 
-  .shows--details
-    margin 15px
-    text-transform uppercase
-    h1
-      font-size 1.25rem
-      margin 8px
-    span
-      opacity 0.7
-      font-size: 0.9rem
+  responsiveGrid(350%, -125%)
+  responsiveDetails(15px, 1.25rem, 0.9rem)
 
-  @media screen and (min-width: 980px)
-    .shows--selector
-      .shows--grid
-        width 180%
-        left -40%
-      .shows--details
-        margin 20px
-        h1
-          font-size 1.4rem
-        span
-          font-size: 1rem
+  // queries
+  @media screen and (min-width 700px) and (max-width 979px)
+    responsiveGrid(250%, -75%)
+    responsiveDetails(20px, 1.4rem, 1rem)
+
+  @media screen and (min-width 980px)
+    responsiveGrid(180%, -40%)
+    responsiveDetails(20px, 1.4rem, 1rem)
 </style>
