@@ -1,18 +1,18 @@
 <template>
   <section class="vice-shows--selector">
     <transition-group tag="div" class="vice-shows--grid">
-      <router-link v-for="{id, product_image_url, column} in shows" :key="id" :to="{ query: { id: id } }" class="vice-shows--show" :style="{'background-image': `url(${product_image_url})`}" :class="`col${column}`">
+      <router-link v-for="{id, product_image_url, column} in shows" :key="id" :to="{ query: { id: id } }" class="vice-shows--show" :style="{'background-image': `url(${product_image_url})`}" :class="`col${column}`" tabindex="-1">
       </router-link>
-      <div v-if="getShow(3)" class="vice-shows--scroll__left" :key="'scroll__left'">
+      <div v-if="getShow(3)" class="vice-shows--scroll__left" :key="'scroll-left'">
         <button v-on:click="scroll(3)">&#9664;</button>
       </div>
       <div class="vice-shows--details" v-if="getShow(4)" :key="'details'">
-        <div>
+        <router-link :to="{ query: { id: getShow(4).id } }">
           <span>{{getShow(4).episodes}} episodes</span>
           <h1>{{getShow(4).title}}</h1>
-        </div>
+        </router-link>
       </div>
-      <div v-if="getShow(5)" class="vice-shows--scroll__right" :key="'scroll__right'">
+      <div v-if="getShow(5)" class="vice-shows--scroll__right" :key="'scroll-right'">
         <button v-on:click="scroll(5)">&#9654;</button>
       </div>
     </transition-group>
@@ -64,8 +64,10 @@ export default class ShowSelector extends Vue {
           height 100px
           display flex
           align-items center
-          div
+          a
             width 100%
+            text-decoration none
+            color #000
             span
               font-size: y
               opacity 0.7
@@ -90,6 +92,7 @@ export default class ShowSelector extends Vue {
         background-size cover
         opacity .7
         transition all 200ms ease
+        outline 0
 
       .col1
         spot 1 1
@@ -125,6 +128,9 @@ export default class ShowSelector extends Vue {
     cursor pointer
     background none
     padding 0px
+    opacity 0.5
+    &:focus, &:hover
+      opacity 1
 
   responsiveGrid(350%, -125%)
   responsiveDetails(1.25rem, 0.9rem)
