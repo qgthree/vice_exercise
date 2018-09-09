@@ -1,11 +1,11 @@
 <template>
-  <main class="shows">
-    <Selector :shows="shows" />
+  <main class="vice-shows">
+    <Selector :shows="subset" />
   </main>
 </template>
 
 <script lang="ts">
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import { Component, Vue } from "vue-property-decorator";
 import Selector from "@/components/Selector.vue"; // @ is an alias to /src
 
@@ -14,24 +14,21 @@ import Selector from "@/components/Selector.vue"; // @ is an alias to /src
     Selector
   },
   computed: {
-    ...mapState(["shows"])
+    subset(): object[] {
+      return this.$store.getters.subset(this.$route.query.id);
+    }
   },
   methods: {
     ...mapActions(["fetchShows"])
   },
-  created() {
-    (<any>this).fetchShows(this.$route.query.id || null);
-  },
-  watch: {
-    "$route.matched"() {
-      (<any>this).fetchShows(this.$route.query.id || null);
-    }
+  created(): void {
+    (<any>this).fetchShows();
   }
 })
 export default class Home extends Vue {}
 </script>
 
-<style scoped lang="stylus">
-  .shows
+<style scoped lang='stylus'>
+  .vice-shows
     min-width 320px
 </style>

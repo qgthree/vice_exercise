@@ -1,13 +1,21 @@
 <template>
-  <section class="shows--selector">
-    <div class="shows--grid">
-      <router-link v-for="{id, product_image_url, column} in shows" :key="id" :to="{ query: { id: id } }" class="shows--show" :style="{'background-image': `url(${product_image_url})`}" :class="`col${column}`">
+  <section class="vice-shows--selector">
+    <transition-group tag="div" class="vice-shows--grid">
+      <router-link v-for="{id, product_image_url, column} in shows" :key="id" :to="{ query: { id: id } }" class="vice-shows--show" :style="{'background-image': `url(${product_image_url})`}" :class="`col${column}`">
       </router-link>
-    </div>
-    <div class="shows--details" v-if="currentShow">
-      <span>{{currentShow.episodes}} episodes</span>
-      <h1>{{currentShow.title}}</h1>
-    </div>
+      <div v-if="getShow(3)" class="vice-shows--scroll__left" :key="'scroll__left'">
+        <button v-on:click="scroll(3)">&#9664;</button>
+      </div>
+      <div class="vice-shows--details" v-if="getShow(4)" :key="'details'">
+        <div>
+          <span>{{getShow(4).episodes}} episodes</span>
+          <h1>{{getShow(4).title}}</h1>
+        </div>
+      </div>
+      <div v-if="getShow(5)" class="vice-shows--scroll__right" :key="'scroll__right'">
+        <button v-on:click="scroll(5)">&#9654;</button>
+      </div>
+    </transition-group>
   </section>
 </template>
 
@@ -15,91 +23,118 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({
-  computed: {
-    currentShow(): number {
-      return (<any>this).shows.find((show: any) => show.column === 4);
+  methods: {
+    getShow(spot: number): object {
+      return (<any>this).shows.find(
+        (show: any): boolean => show.column === spot
+      );
+    },
+    scroll(spot: number): void {
+      if ((<any>this).getShow(spot)) {
+        this.$router.push({ query: { id: (<any>this).getShow(spot).id } });
+      }
     }
   }
 })
 export default class ShowSelector extends Vue {
-  @Prop() private shows!: object;
+  @Prop() private shows!: object[];
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="stylus">
+<style scoped lang='stylus'>
   // mixins
-  start(n)
-    grid-column-start n
-    grid-column-end n+1
+  spot(x, y)
+    grid-row-start x
+    grid-row-end x+1
+    grid-column-start y
+    grid-column-end y+1
 
   responsiveGrid(x, y)
-    .shows--selector
-      .shows--grid
+    .vice-shows--selector
+      .vice-shows--grid
         width x
         left y
 
-  responsiveDetails(x, y, z)
-    .shows--selector
-      .shows--details
-        text-transform uppercase
-        margin x
-        h1
-          font-size y
-          margin 8px
-        span
-          font-size: z
-          opacity 0.7
+  responsiveDetails(x, y)
+    .vice-shows--selector
+      .vice-shows--grid
+        .vice-shows--details
+          spot 2 4
+          text-transform uppercase
+          height 100px
+          display flex
+          align-items center
+          div
+            width 100%
+            span
+              font-size: y
+              opacity 0.7
+            h1
+              font-size x
+              margin 8px 0 0 0
 
   // template styles
-  .shows--selector
+  .vice-shows--selector
     width 100%
     overflow hidden
     margin 30px 0px
-    .shows--grid
+    .vice-shows--grid
       display grid
       grid-gap 30px
       grid-template-columns repeat(7, 1fr)
       position relative
-      .shows--show
-        width 100%
+      .vice-shows--show
         height 0
         padding-bottom 150%
         background-position center
         background-size cover
-        transition all 0.2s ease
-        grid-row-start 1
-        grid-row-end 2
-        opacity 0.7
-        transition all 200ms
-        &:hover
-          opacity 1
+        opacity .7
+        transition all 200ms ease
 
       .col1
-        start 1
+        spot 1 1
       .col2
-        start 2
+        spot 1 2
       .col3
-        start 3
+        spot 1 3
       .col4
-        start 4
+        spot 1 4
         opacity 1
       .col5
-        start 5
+        spot 1 5
       .col6
-        start 6
+        spot 1 6
       .col7
-        start 7
+        spot 1 7
+
+  .vice-shows--scroll__left
+    spot 2 3
+    text-align right
+    align-self center
+
+  .vice-shows--scroll__right
+    spot 2 5
+    text-align left
+    align-self center
+
+  button
+    color #000
+    font-size 38px
+    border none
+    outline 0
+    cursor pointer
+    background none
+    padding 0px
 
   responsiveGrid(350%, -125%)
-  responsiveDetails(15px, 1.25rem, 0.9rem)
+  responsiveDetails(1.25rem, 0.9rem)
 
   // queries
   @media screen and (min-width 700px) and (max-width 979px)
     responsiveGrid(250%, -75%)
-    responsiveDetails(20px, 1.4rem, 1rem)
+    responsiveDetails(1.4rem, 1rem)
 
   @media screen and (min-width 980px)
     responsiveGrid(180%, -40%)
-    responsiveDetails(20px, 1.4rem, 1rem)
+    responsiveDetails(1.4rem, 1rem)
 </style>
