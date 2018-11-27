@@ -2,8 +2,6 @@
 
 This is the outcome of an HTML/CSS/JS exercise that involves building a single page app to navigate through various VICE shows. **For this version I adjusted the UX and made the code more efficient/compact.**
 
-View at [https://qgthree.github.io/vice_exercise_build](https://qgthree.github.io/vice_exercise_build).
-
 ## Instructions
 
 - within "dist" folder, preview locally with a static file server like Yarn serve _(use "serve -l 3000" to fetch data from http://localhost:3000/shows.json)_.
